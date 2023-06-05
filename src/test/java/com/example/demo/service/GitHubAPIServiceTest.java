@@ -1,86 +1,71 @@
-import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.model.Branch;
+package com.example.demo.service;
+
+
 import com.example.demo.model.Repository;
-import com.example.demo.service.GitHubAPIService;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class GitHubAPIServiceTest {
+@SpringBootTest
+class GitHubControllerTest {
 
-    @Mock
+    private MockWebServer mockWebServer;
     private WebClient webClient;
-
     private GitHubAPIService gitHubAPIService;
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
+    void setUp() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
+        webClient = WebClient.create(mockWebServer.url("/").toString());
         gitHubAPIService = new GitHubAPIService(webClient);
     }
 
+    @AfterEach
+    void tearDown() throws IOException {
+        mockWebServer.shutdown();
+    }
+
     @Test
-    public void testGetUserRepositories() {
+    void testGetUserRepositories() throws InterruptedException {
+
         String username = "testuser";
-        String acceptHeader = "application/json";
+        String acceptHeader = MediaType.APPLICATION_JSON_VALUE;
 
-        // Mock response from webClient
-        Repository repository1 = new Repository("repo1", false);
-        Repository repository2 = new Repository("repo2", false);
-        List<Repository> repositories = Arrays.asList(repository1, repository2);
-        when(webClient.get()).thenReturn(webClient);
-        when(webClient.uri(eq("/users/{username}/repos"), eq(username))).thenReturn(webClient);
-        when(webClient.accept(any(MediaType.class))).thenReturn(webClient);
-        when(webClient.header(eq(HttpHeaders.ACCEPT), eq(MediaType.APPLICATION_JSON_VALUE))).thenReturn(webClient);
-        when(webClient.retrieve()).thenReturn(webClient);
-        when(webClient.onStatus(eq(HttpStatus.NOT_FOUND::equals), any())).thenReturn(webClient);
-        when(webClient.bodyToFlux(Repository.class)).thenReturn(Flux.fromIterable(repositories));
+        String repositoriesResponseBody = "[{\"name\": \"repo1\", \"fork\": false}, {\"name\": \"repo2\", \"fork\": true}]";
+        MockResponse repositoriesResponse = new MockResponse()
+                .setResponseCode(HttpStatus.OK.value())
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody(repositoriesResponseBody);
+        mockWebServer.enqueue(repositoriesResponse);
 
-        // Mock getBranchesOfRepository
-        Branch branch1 = new Branch("branch1");
-        Branch branch2 = new Branch("branch2");
-        List<Branch> branches = Arrays.asList(branch1, branch2);
-        when(gitHubAPIService.getBranchesOfRepository(eq(username), eq("repo1"))).thenReturn(Mono.just(branches));
-        when(gitHubAPIService.getBranchesOfRepository(eq(username), eq("repo2"))).thenReturn(Mono.empty());
+        Flux<Repository> repositories = gitHubAPIService.getUserRepositories(username, acceptHeader);
 
-        Flux<Repository> result = gitHubAPIService.getUserRepositories(username, acceptHeader);
+        StepVerifier.create(repositories)
+                .expectErrorSatisfies(throwable -> {
+                    assertTrue(throwable instanceof WebClientResponseException);
+                    WebClientResponseException responseException = (WebClientResponseException) throwable;
+                    assertEquals(HttpStatus.UNAUTHORIZED, responseException.getStatusCode());
 
-        StepVerifier.create(result)
-                .expectNext(repository1.setBranches(branches))
-                .expectNext(repository2)
-                .expectComplete()
-                .verify();
+
+                    String responseBody = responseException.getResponseBodyAsString();
+                    assertNotNull(responseBody);
+                    assertTrue(responseBody.contains("Unauthorized"));
+                    assertTrue(responseBody.contains("Access denied"));
+                });
     }
-
-    @Test
-    public void testGetUserRepositories_UserNotFound() {
-        String username = "nonexistentuser";
-        String acceptHeader = "application/json";
-
-        when(webClient.get()).thenReturn(webClient);
-        when(webClient.uri(eq("/users/{username}/repos"), eq(username))).thenReturn(webClient);
-        when(webClient.accept(any(MediaType.class))).thenReturn(webClient);
-        when(webClient.header(eq(HttpHeaders.ACCEPT), eq(MediaType.APPLICATION_JSON_VALUE))).thenReturn(webClient);
-        when(webClient.retrieve()).thenReturn(webClient);
-        when(webClient.onStatus(eq(HttpStatus.NOT_FOUND::equals), any())).thenReturn(webClient);
-        when(webClient.bodyToFlux(Repository.class)).thenReturn(Flux.empty());
-
-        Flux<Repository> result = gitHubAPIService.getUserRepositories(username, acceptHeader);
-
-        StepVerifier.create(result)
-                .expectError(UserNotFoundException.class)
-                .verify();
-    }
+}

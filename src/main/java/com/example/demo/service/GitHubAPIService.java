@@ -5,6 +5,9 @@ import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Branch;
 import com.example.demo.model.Repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,12 +21,12 @@ import java.util.List;
 @Service
 public class GitHubAPIService {
 
-    //    @Value("${github.token}")
-//    private String token;
-    private String token = "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";
+
+    private String token = "";
     private final WebClient webClient;
 
     public GitHubAPIService(WebClient webClient) {
+        System.out.println("token: " + token);
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.github.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)

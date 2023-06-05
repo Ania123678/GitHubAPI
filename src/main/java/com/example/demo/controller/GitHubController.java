@@ -5,6 +5,7 @@ import com.example.demo.exception.MediaTypeNotAcceptableException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Repository;
 import com.example.demo.service.GitHubAPIService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
