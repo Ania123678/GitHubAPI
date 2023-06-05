@@ -1,1 +1,16 @@
 # GithubAPI
+This project contains a GitHub API for retrieving data about a user's repositories and associated tests.
+
+## Project Setup:
+
+1. Download the project as a .zip file.
+2. Open it in your preferred IDE.
+## Testing the API:
+1. In the application.properties file, write the generated API token from GitHub to the token.github variable for authorization.
+2. Run DemoApplication.main().
+3. In your preferred API tool, create a GET request with the following URL: http://localhost:8080/apiv1/repositories/{username}.
+4. In the username field, enter the GitHub username.
+5. Add the header: Accept: application/json.
+## Additional Information:
+The API does not return data in XML format. To test the error handler, add the header: Accept: application/xml.
+The API handles a 404 error by returning an error message in JSON format.
