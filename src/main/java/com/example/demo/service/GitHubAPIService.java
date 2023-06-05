@@ -1,8 +1,5 @@
 package com.example.demo.service;
 
-
-
-import com.example.demo.exception.MediaTypeNotAcceptableException;
 import com.example.demo.exception.UserNotFoundException;
 
 import com.example.demo.model.Branch;
@@ -13,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.List;
@@ -22,9 +18,9 @@ import java.util.List;
 @Service
 public class GitHubAPIService {
 
-//    @Value("${github.token}")
+    //    @Value("${github.token}")
 //    private String token;
-    private String token = "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";
+    private String token = "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";
     private final WebClient webClient;
 
     public GitHubAPIService(WebClient webClient) {
@@ -35,7 +31,6 @@ public class GitHubAPIService {
     }
 
     public Flux<Repository> getUserRepositories(String username, String acceptHeader) {
-        System.out.println("Header w getUserRepositories method: " + acceptHeader);
         return webClient
                 .get()
                 .uri("/users/{username}/repos", username)

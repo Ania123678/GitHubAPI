@@ -29,10 +29,7 @@ public class GitHubController {
 
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Flux<Repository> getUserRepositories(@PathVariable String username, @RequestHeader(value = HttpHeaders.ACCEPT) String acceptHeader) {
-        System.out.println("Jestem w getmapping");
-        System.out.println("Header w @GetMapping: " + acceptHeader);
         if (acceptHeader.contains("application/xml")) {
-            System.out.println("Jestem w !acceptHeader.contains(MediaType.APPLICATION_JSON_VALUE)");
             throw new MediaTypeNotAcceptableException(HttpStatus.NOT_ACCEPTABLE.value(),"Not Acceptable");
         }
         return gitHubAPIService.getUserRepositories(username, acceptHeader);
