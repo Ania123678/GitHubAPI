@@ -18,8 +18,7 @@ import java.util.List;
 @Service
 public class GitHubAPIService {
 
-    //    @Value("${github.token}")
-//    private String token;
+
     private String token = "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";
     private final WebClient webClient;
 
