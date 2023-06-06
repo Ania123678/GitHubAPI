@@ -2,12 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Repository;
 import com.example.demo.service.GitHubAPIService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-
-
 
 @RestController
 @RequestMapping("/apiv1")
