@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.MediaTypeNotAcceptableException;
 import com.example.demo.exception.UserNotFoundException;
 
+import com.example.demo.filter.XmlHeaderCheckFilter;
 import com.example.demo.model.Branch;
 import com.example.demo.model.Repository;
 
@@ -18,28 +20,28 @@ import java.util.List;
 @Service
 public class GitHubAPIService {
 
-
-    private String token = "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";
+    //TODO: wstrzykiwanie z Value
+    private String token = "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";
     private final WebClient webClient;
 
     public GitHubAPIService(WebClient webClient) {
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.github.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .filter(new XmlHeaderCheckFilter())
                 .build();
     }
 
     public Flux<Repository> getUserRepositories(String username, String acceptHeader) {
-        return webClient
+        if (acceptHeader.equals(MediaType.APPLICATION_XML_VALUE)) {
+            throw new MediaTypeNotAcceptableException(HttpStatus.NOT_ACCEPTABLE.value(), "Not Acceptable");
+        }
+        Flux<Repository> repos = webClient
                 .get()
                 .uri("/users/{username}/repos", username)
-                .accept(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
-
                 .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse ->
                         Mono.error(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value(), "USER NOT FOUND")))
-
                 .bodyToFlux(Repository.class)
                 .filter(repository -> !repository.isFork())
                 .flatMap(repository -> getBranchesOfRepository(username, repository.getName())
@@ -48,6 +50,7 @@ public class GitHubAPIService {
                             return repository;
                         })
                         .defaultIfEmpty(repository));
+        return  repos;
     }
 
     public Mono<List<Branch>> getBranchesOfRepository(String username, String repository) {

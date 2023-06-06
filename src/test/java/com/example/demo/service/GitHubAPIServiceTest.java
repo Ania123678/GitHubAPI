@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO: WebTestClient, WireMOC, testy integracyjne?
 @SpringBootTest
 class GitHubControllerTest {
 

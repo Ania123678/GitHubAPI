@@ -1,6 +1,5 @@
 package com.example.demo.handlers;
 
-
 import com.example.demo.exception.ErrorJsonResponse;
 import com.example.demo.exception.MediaTypeNotAcceptableException;
 import com.example.demo.exception.UserNotFoundException;
@@ -9,12 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class CustomErrorHandler extends ResponseEntityExceptionHandler {

@@ -1,7 +1,11 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Branch {
 
     @JsonProperty("name")
@@ -10,19 +14,4 @@ public class Branch {
     @JsonProperty("commit")
     private Commit commit;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Commit getCommit() {
-        return commit;
-    }
-
-    public void setCommit(Commit commit) {
-        this.commit = commit;
-    }
 }

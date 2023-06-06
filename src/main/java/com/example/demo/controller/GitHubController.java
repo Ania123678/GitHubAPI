@@ -28,11 +28,10 @@ public class GitHubController {
         this.gitHubAPIService = gitHubAPIService;
     }
 
+    //TODO: jedna linijka, if wyrzucić []
+
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Flux<Repository> getUserRepositories(@PathVariable String username, @RequestHeader(value = HttpHeaders.ACCEPT) String acceptHeader) {
-        if (acceptHeader.contains("application/xml")) {
-            throw new MediaTypeNotAcceptableException(HttpStatus.NOT_ACCEPTABLE.value(),"Not Acceptable");
-        }
+    public Flux<Repository> getUserRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
         return gitHubAPIService.getUserRepositories(username, acceptHeader);
     }
 }
