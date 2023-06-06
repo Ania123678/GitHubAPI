@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
-//TODO: lombok - nie widzi rzeczy typu gettery i settery [ZROBIONE]
 @Getter
 @Setter
 public class Repository {

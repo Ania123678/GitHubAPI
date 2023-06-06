@@ -7,6 +7,7 @@ import com.example.demo.filter.XmlHeaderCheckFilter;
 import com.example.demo.model.Branch;
 import com.example.demo.model.Repository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,16 +17,17 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.List;
 
-
 @Service
 public class GitHubAPIService {
 
     //TODO: wstrzykiwanie z Value
-    private String token = "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";
+//    @Value("${githubToken}")
+    private final String token = "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";
+
     private final WebClient webClient;
 
-    public GitHubAPIService(WebClient webClient) {
-        this.webClient = WebClient.builder()
+    public GitHubAPIService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder
                 .baseUrl("https://api.github.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .filter(new XmlHeaderCheckFilter())
@@ -50,7 +52,7 @@ public class GitHubAPIService {
                             return repository;
                         })
                         .defaultIfEmpty(repository));
-        return  repos;
+        return repos;
     }
 
     public Mono<List<Branch>> getBranchesOfRepository(String username, String repository) {
