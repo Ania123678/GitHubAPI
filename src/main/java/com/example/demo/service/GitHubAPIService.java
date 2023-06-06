@@ -21,7 +21,7 @@ import java.util.List;
 public class GitHubAPIService {
 
     //TODO: wstrzykiwanie z Value
-    private String token = "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";
+    private String token = "";
     private final WebClient webClient;
 
     public GitHubAPIService(WebClient webClient) {
