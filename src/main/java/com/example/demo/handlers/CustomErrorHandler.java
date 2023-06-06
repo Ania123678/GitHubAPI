@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-
 @RestControllerAdvice
 public class CustomErrorHandler extends ResponseEntityExceptionHandler {
 
@@ -22,12 +21,11 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-
     @ExceptionHandler(MediaTypeNotAcceptableException.class)
     public ResponseEntity<ErrorJsonResponse> handleMediaTypeNotAcceptable() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        ErrorJsonResponse response = new ErrorJsonResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Media Type Not Acceptable");
+        ErrorJsonResponse response = new ErrorJsonResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Not Acceptable");
         return new ResponseEntity<>(response, headers, HttpStatus.NOT_ACCEPTABLE);
     }
 

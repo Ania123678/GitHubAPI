@@ -15,10 +15,6 @@ public class UserNotFoundException extends RuntimeException {
 
     private String message;
 
-//    public UserNotFoundException(int status, String message) {
-//        this.status = status;
-//        this.message = message;
-//    }
 
 }
 

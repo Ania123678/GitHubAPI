@@ -24,8 +24,8 @@ public class GitHubAPIService {
     private String token = "";
     private final WebClient webClient;
 
-    public GitHubAPIService(WebClient webClient) {
-        this.webClient = WebClient.builder()
+    public GitHubAPIService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder
                 .baseUrl("https://api.github.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .filter(new XmlHeaderCheckFilter())
