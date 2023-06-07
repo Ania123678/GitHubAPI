@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/apiv1")
 public class GitHubController {
 
-    private final GitHubAPIService gitHubAPIService;
+    private GitHubAPIService gitHubAPIService;
 
     public GitHubController(GitHubAPIService gitHubAPIService) {
         this.gitHubAPIService = gitHubAPIService;
@@ -19,7 +19,6 @@ public class GitHubController {
     //TODO: githubcoontroller - app/xml webclient - ustawia na app/json
 
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @ResponseBody
     public Flux<Repository> getRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
         return gitHubAPIService.getUserRepositories(username, acceptHeader);
     }

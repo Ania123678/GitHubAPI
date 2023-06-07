@@ -7,6 +7,7 @@ import com.example.demo.filter.XmlHeaderCheckFilter;
 import com.example.demo.model.Branch;
 import com.example.demo.model.Repository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,18 +17,17 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.List;
 
-
 @Service
 public class GitHubAPIService {
 
-    //TODO: Value{$""}
-    private String token = "";
     private final WebClient webClient;
 
-    public GitHubAPIService(WebClient.Builder webClientBuilder) {
+    // value injection occurs after the constructor call
+    public GitHubAPIService(@Value("${github.token}") String token,WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
                 .baseUrl("https://api.github.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE)
                 .filter(new XmlHeaderCheckFilter())
                 .build();
     }

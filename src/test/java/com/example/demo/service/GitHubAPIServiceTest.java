@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.DispatcherType;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
@@ -58,7 +59,7 @@ class GitHubAPIServiceTest {
 //                .baseUrl("http://localhost:" + wireMockServer.port())
 //                .build();
 
-        gitHubAPIService = new GitHubAPIService(WebClient.builder()
+        gitHubAPIService = new GitHubAPIService(String token, WebClient.builder()
                 .baseUrl(String.format("http://localhost:%s", wireMockServer.port()))
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
         );
