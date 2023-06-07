@@ -20,7 +20,7 @@ public class GitHubController {
 
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public Flux<Repository> getUserRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
+    public Flux<Repository> getRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
         return gitHubAPIService.getUserRepositories(username, acceptHeader);
     }
 }
