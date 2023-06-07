@@ -16,7 +16,7 @@ public class GitHubController {
         this.gitHubAPIService = gitHubAPIService;
     }
 
-    //TODO: dalej musi przyjąć acceptHeader jako arguemnt inaczej napisuje header
+    //TODO: githubcoontroller - app/xml webclient - ustawia na app/json
 
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody

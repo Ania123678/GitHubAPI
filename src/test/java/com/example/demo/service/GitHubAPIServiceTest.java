@@ -19,8 +19,10 @@ import jakarta.servlet.DispatcherType;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.reactive.server.MockServerConfigurer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -41,7 +43,7 @@ class GitHubAPIServiceTest {
     private WebTestClient webTestClient;
 
 
-    //TODO: javax/servlet/DispatcherType error
+
     @BeforeEach
     void setUp() {
         wireMockServer = new WireMockServer();
@@ -52,35 +54,38 @@ class GitHubAPIServiceTest {
                 .build();
     }
 
-//
-//    @AfterEach
-//    void tearDown() {
-//        wireMockServer.stop();
-//    }
+    @AfterEach
+    void tearDown() {
+        wireMockServer.stop();
+    }
 
     @Test
     void testfun(){
-        System.out.println("halo");
+        System.out.println("Test1");
     }
 
-//    @Test
-//    void testGetUserRepositories() {
-//
-//        String username = "testuser";
-//        String repositoriesResponseBody = "[{\"name\": \"repo1\", \"fork\": false}, {\"name\": \"repo2\", \"fork\": true}]";
-//        stubFor(get(urlEqualTo("/users/testuser/repos"))
-//                .willReturn(aResponse()
-//                        .withStatus(200)
-//                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                        .withBody("[{\"name\": \"repo1\", \"fork\": false}, {\"name\": \"repo2\", \"fork\": true}]")));
-//
-//        GitHubAPIService gitHubAPIService = new GitHubAPIService((WebClient.Builder) webTestClient);
-//        Flux<Repository> repositories = gitHubAPIService.getUserRepositories(username, MediaType.APPLICATION_JSON_VALUE);
-//        repositories.as(StepVerifier::create)
-//                .expectNextCount(2)
-//                .verifyComplete();
-//    }
-//
+    @Test
+    void testGetUserRepositories() {
+
+        String username = "testuser";
+        String repositoriesResponseBody = "[{\"name\": \"repo1\", \"fork\": false}, {\"name\": \"repo2\", \"fork\": true}]";
+
+        stubFor(get(urlEqualTo("/users/testuser/repos"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .withBody("[{\"name\": \"repo1\", \"fork\": false}, {\"name\": \"repo2\", \"fork\": true}]")));
+
+        //TODO: Requiredtype: builder Provided: WebTestClient
+        GitHubAPIService gitHubAPIService = new GitHubAPIService(webTestClient);
+
+        Flux<Repository> repositories = gitHubAPIService.getUserRepositories(username, MediaType.APPLICATION_JSON_VALUE);
+
+        repositories.as(StepVerifier::create)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
 //    @Test
 //    void testGetBranchesOfRepository() {
 //        String username = "testuser";

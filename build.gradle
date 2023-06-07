@@ -24,12 +24,23 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
+	// Spring
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation "com.github.tomakehurst:wiremock-jre8:2.35.0"
-
-	testImplementation "jakarta.servlet:jakarta.servlet-api"
 	testImplementation "org.springframework.boot:spring-boot-dependencies:3.0.0"
+
+	// Wiremock
+	testImplementation "com.github.tomakehurst:wiremock-standalone:3.0.0-beta-8"
+
+	// Jakarta servlet
+	testImplementation "jakarta.servlet:jakarta.servlet-api:5.0.0"
+
+
+	// SLF4J API
+	implementation 'org.slf4j:slf4j-api'
+
+	// Logback - Logging Framework
+	implementation 'ch.qos.logback:logback-classic'
 
 	testImplementation("com.squareup.okhttp3:mockwebserver")
 	testImplementation('org.junit.jupiter:junit-jupiter')

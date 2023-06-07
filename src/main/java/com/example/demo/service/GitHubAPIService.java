@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class GitHubAPIService {
 
-    //TODO: wstrzykiwanie z Value
+    //TODO: Value{$""}
     private String token = "";
     private final WebClient webClient;
 
