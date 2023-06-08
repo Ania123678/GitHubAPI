@@ -16,7 +16,7 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorJsonResponse> handleUserNotFoundException(UserNotFoundException ex) {
-        ErrorJsonResponse errorResponse = new ErrorJsonResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        ErrorJsonResponse errorResponse = new ErrorJsonResponse(HttpStatus.NOT_FOUND.value(), "User Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 

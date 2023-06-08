@@ -22,7 +22,6 @@ public class GitHubAPIService {
 
     private final WebClient webClient;
 
-    // value injection occurs after the constructor call
     public GitHubAPIService(@Value("${github.token}") String token,WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
                 .baseUrl("https://api.github.com")

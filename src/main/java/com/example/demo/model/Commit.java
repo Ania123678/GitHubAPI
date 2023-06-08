@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Commit {
+
     @JsonProperty("sha")
     private String sha;
 

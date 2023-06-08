@@ -16,8 +16,6 @@ public class GitHubController {
         this.gitHubAPIService = gitHubAPIService;
     }
 
-    //TODO: githubcoontroller - app/xml webclient - ustawia na app/json
-
     @GetMapping(value = "/repositories/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Flux<Repository> getRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
         return gitHubAPIService.getUserRepositories(username, acceptHeader);

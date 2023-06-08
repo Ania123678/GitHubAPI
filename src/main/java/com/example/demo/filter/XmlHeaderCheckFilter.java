@@ -19,8 +19,6 @@ public class XmlHeaderCheckFilter implements ExchangeFilterFunction {
     public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {
         HttpHeaders requestHeaders = request.headers();
 
-        System.out.println("requestHeaders: " + requestHeaders);
-
         if (requestHeaders.containsKey(ACCEPT_HEADER_NAME)) {
             MediaType acceptMediaType = requestHeaders.getAccept().stream().findFirst().orElse(null);
 
